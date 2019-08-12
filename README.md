@@ -14,7 +14,7 @@ This "Quick Action" adds "Passthru to MKV" as an option under "Services" when yo
 If you inspect the workflow you will see it simply amounts to the following bash script
 
 ```
-#finder item passed in as arguemnt
+#finder item passed in as argument
 full_input_path=$1
 
 #paramater expansion to remove file extension
