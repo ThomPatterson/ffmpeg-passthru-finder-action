@@ -2,7 +2,7 @@
 Automator quick action to passthru streams of selected media file to MKV container
 
 ## Why was this created?
-My camera outputs recordings to a DAV file format.  Unfortunately this isn't a very compatible format, and the only way to get VLC to play it is to mess around with some deep settings that I'd rather not touch.  I happen to know that my camera is just recording a H.265 stream, which will playback perfectly if I do a passthrough to a MKV container.  After a quick proof of concept with ffmpeg (i.e. `ffmpeg -i input.dav -codec copy output.mp4`) I put together this automator action.  
+My camera outputs recordings to a DAV file format.  Unfortunately this isn't a very compatible format, and the only way to get VLC to play it is to mess around with some deep settings that I'd rather not touch.  I happen to know that my camera is just recording a H.265 stream, which will playback perfectly if I do a passthrough to a MKV container.  After a quick proof of concept with ffmpeg (i.e. `ffmpeg -i input.dav -codec copy output.mkv`) I put together this automator action.  
 
 ## Requirements
 Assumes [ffmpeg](https://ffmpeg.org) is already installed at `/usr/local/bin/ffmpeg`
