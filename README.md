@@ -45,6 +45,6 @@ done
 ```
 
 ## How to install
-* Clone this repo
+* Clone or download this repo
 * Double-click on the "Passthru to MKV.workflow" file to prompt MacOS to install it.
 * (Bonus Points) Go to "System Preferences > Keyboard > Shortcuts > Services > Passthru to MKV" and assign a shortcut.  I use Command-Shift-M.
