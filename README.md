@@ -8,25 +8,39 @@ My camera outputs recordings to a DAV file format.  Unfortunately this isn't a v
 Assumes [ffmpeg](https://ffmpeg.org) is already installed at `/usr/local/bin/ffmpeg`
 
 ## What this action does
-This "Quick Action" adds "Passthru to MKV" as an option under "Services" when you right-click a file.  A new file will be created in the same directory with a '.mkv' extension.
+This "Quick Action" adds "Passthru to MKV" as an option under "Services" when you right-click a file.  A new file will be created in the same directory with a '.mkv' extension.  If multiple files are selected, only those with an extension in the `handled_file_exts` array will be converted.
 ![Screenshot of Services menu](example.png "Screenshot of Services menu")
 
 If you inspect the workflow you will see it simply amounts to the following bash script
 
 ```
-#finder item passed in as argument
-full_input_path=$1
+#array of file extensions that will be converted
+handled_file_exts=("dav" "mkv" "mp4" "m4v" "m4p")
 
-#paramater expansion to remove file extension
-#https://stackoverflow.com/questions/12152626/how-can-i-remove-the-extension-of-a-filename-in-a-shell-script
-full_input_path_no_ext=${full_input_path%.*}
+#finder items passed in as arguments, so first we need to loop over all arguments
+IFS=$'\n'
+for full_input_path in "$@"
+do
 
-#create output path
-full_output_path=$full_input_path_no_ext
-full_output_path+=".mkv"
+	#paramater expansion to remove file extension
+	full_input_path_no_ext=${full_input_path%.*}
 
-#use ffmpeg to pass the video stream through to a new container
-/usr/local/bin/ffmpeg -i "${full_input_path}" -codec copy "${full_output_path}"
+	#http://www.tldp.org/LDP/abs/html/parameter-substitution.html#PSUB2
+	file_ext=${full_input_path##*.}
+
+	#create output path
+	full_output_path=$full_input_path_no_ext
+	full_output_path+=".mkv"
+
+	#check if the file extension is one we want to handle
+	if printf '%s\n' ${handled_file_exts[@]} | grep -q -i -e "^$file_ext$"; then
+
+    	#use ffmpeg to pass the video stream through to a new container
+		/usr/local/bin/ffmpeg -i "${full_input_path}" -codec copy "${full_output_path}"
+
+	fi
+
+done
 
 ```
 

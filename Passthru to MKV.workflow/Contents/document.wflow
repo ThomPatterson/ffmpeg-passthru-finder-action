@@ -77,8 +77,6 @@
 				</array>
 				<key>arguments</key>
 				<dict/>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -130,19 +128,37 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>#finder item passed in as arguemnt
-full_input_path=$1
+					<string>#array of file extensions that will be converted
+handled_file_exts=("dav" "mkv" "mp4" "m4v" "m4p")
 
-#paramater expansion to remove file extension
-#https://stackoverflow.com/questions/12152626/how-can-i-remove-the-extension-of-a-filename-in-a-shell-script
-full_input_path_no_ext=${full_input_path%.*}
+#finder items passed in as arguments, so first we need to loop over all arguments
+IFS=$'\n'
+for full_input_path in "$@"
+do
 
-#create output path
-full_output_path=$full_input_path_no_ext
-full_output_path+=".mkv"
+	#paramater expansion to remove file extension
+	full_input_path_no_ext=${full_input_path%.*}
 
-#use ffmpeg to pass the video stream through to a new container
-/usr/local/bin/ffmpeg -i "${full_input_path}" -codec copy "${full_output_path}"</string>
+	#http://www.tldp.org/LDP/abs/html/parameter-substitution.html#PSUB2
+	file_ext=${full_input_path##*.}
+
+	#create output path
+	full_output_path=$full_input_path_no_ext
+	full_output_path+=".mkv"
+
+	#check if the file extension is one we want to handle
+	if printf '%s\n' ${handled_file_exts[@]} | grep -q -i -e "^$file_ext$"; then
+
+    	#use ffmpeg to pass the video stream through to a new container
+		/usr/local/bin/ffmpeg -i "${full_input_path}" -codec copy "${full_output_path}"
+
+	fi
+
+done
+
+
+
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -252,12 +268,10 @@ full_output_path+=".mkv"
 						<string>4</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.000000:550.000000</string>
+				<string>389.000000:684.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
@@ -267,7 +281,7 @@ full_output_path+=".mkv"
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>1D7B4D48-D194-41D8-BCEE-5C183E8D0975</key>
+		<key>9B54F0DB-8D08-4347-95A9-D3AF46C7C7C5</key>
 		<dict>
 			<key>from</key>
 			<string>0743C260-5191-4307-8161-13CE0E77BB23 - 0743C260-5191-4307-8161-13CE0E77BB23</string>
